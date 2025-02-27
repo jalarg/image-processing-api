@@ -10,11 +10,11 @@ export interface TaskImage {
 }
 
 export class Task {
-  public status: string;
-  public price: number;
-  public originalPath: string;
-  public images: Array<TaskImage>;
-
+  id?: string;
+  status: string;
+  price: number;
+  originalPath: string;
+  images: Array<TaskImage>;
   constructor(originalPath: string, price: number) {
     this.status = TaskStatus.PENDING;
     this.price = price;
