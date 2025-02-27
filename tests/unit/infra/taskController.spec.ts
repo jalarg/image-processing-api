@@ -1,5 +1,5 @@
 import { describe, it, vi, beforeEach, expect } from "vitest";
-import { TaskController } from "../src/infrastructure/controllers/task.controller";
+import { TaskController } from "../../../src/infrastructure/controllers/task.controller";
 import { Request, Response } from "express";
 
 // Mock implementations of the use cases (getTask and createTask)

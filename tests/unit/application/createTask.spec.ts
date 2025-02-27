@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { CreateTaskUseCase } from "../src/application/use-cases/create-task.use-case";
-import { Task } from "../src/domain/task.entity";
-import { TaskRepository } from "../src/domain/task.repository";
+import { CreateTaskUseCase } from "../../../src/application/use-cases/create-task.use-case";
+import { Task } from "../../../src/domain/task.entity";
+import { TaskRepository } from "../../../src/domain/task.repository";
 
 describe("CreateTaskUseCase", () => {
   let taskRepository: TaskRepository;

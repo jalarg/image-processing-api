@@ -1,9 +1,9 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { TaskRepositoryMongo } from "../src/infrastructure/repositories/task.repository.mongo";
-import { TaskModel } from "../src/infrastructure/database/models/task.model";
-import { Task } from "../src/domain/task.entity";
+import { TaskRepositoryMongo } from "../../../src/infrastructure/repositories/task.repository.mongo";
+import { TaskModel } from "../../../src/infrastructure/database/models/task.model";
+import { Task } from "../../../src/domain/task.entity";
 
-vi.mock("../src/infrastructure/database/models/task.model", () => {
+vi.mock("../../../src/infrastructure/database/models/task.model", () => {
   return {
     TaskModel: Object.assign(
       vi.fn().mockImplementation((data) => ({
@@ -26,7 +26,7 @@ vi.mock("../src/infrastructure/database/models/task.model", () => {
   };
 });
 
-vi.mock("../src/domain/task.entity", () => {
+vi.mock("../../../src/domain/task.entity", () => {
   return {
     Task: vi.fn().mockImplementation((originalPath, price) => ({
       status: "pending",
