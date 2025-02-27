@@ -4,7 +4,9 @@
   "description": "Prueba técnica: API REST para Procesado de Imágenes y Consulta de Tareas",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "vitest --silent",
+    "test:watch": "vitest --watch",
+    "test:coverage": "vitest --coverage",
     "dev": "nodemon -r ts-node/register src/server.ts"
   },
   "keywords": [],
