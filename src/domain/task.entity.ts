@@ -10,7 +10,7 @@ export interface TaskImage {
 }
 
 export class Task {
-  id?: string;
+  _id?: string;
   status: string;
   price: number;
   originalPath: string;

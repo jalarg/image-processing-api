@@ -6,7 +6,7 @@ export class ProcessImageUseCase {
 
   async execute(taskId: string, imagePath: string): Promise<any> {
     const task = await this.taskRepository.findById(taskId);
-    if (!task) {
+    if (!task || !task._id) {
       throw new Error("Task not found");
     }
     try {

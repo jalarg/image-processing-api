@@ -20,7 +20,7 @@ export async function processImage(taskId: string) {
 
     // Process image with Sharp (resize to 1024px and 800px)
     const resolutions = [1024, 800];
-    const processedImages = [];
+    const processedImages: { resolution: string; path: string }[] = [];
 
     for (const resolution of resolutions) {
       console.log(`🛠️ Resizing to ${resolution}px`);
@@ -28,6 +28,10 @@ export async function processImage(taskId: string) {
 
       // Resize and save the image
       await sharp(imageBuffer).resize({ width: resolution }).toFile(outputPath);
+      if (!resolution || !outputPath) {
+        throw new Error("Could not save the image");
+      }
+
       // Add processed image to the task
       processedImages.push({
         resolution: resolution.toString(),

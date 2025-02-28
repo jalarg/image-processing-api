@@ -1,4 +1,4 @@
-import mongoose, { Schema, Document, Types } from "mongoose";
+import mongoose, { Schema, Document, Types, Model } from "mongoose";
 import { TaskStatus } from "../../../domain/task.entity";
 
 interface Image {
@@ -6,30 +6,35 @@ interface Image {
   path: string;
 }
 
-interface TaskDocument extends Document {
-  status: TaskStatus.PENDING | TaskStatus.COMPLETED | TaskStatus.FAILED;
+export interface TaskDocument extends Document {
+  _id: Types.ObjectId;
+  status: TaskStatus;
   price: number;
   originalPath: string;
-  images: Image[];
-  completeTask(this: TaskDocument, images: Image[]): void;
-  markAsFailed(this: TaskDocument): void;
+  images: { resolution: string; path: string }[];
+
+  completeTask(images: Image[]): void;
+  markAsFailed(): void;
 }
 
-const taskSchema = new Schema<TaskDocument>({
-  status: {
-    type: String,
-    enum: [TaskStatus.PENDING, TaskStatus.COMPLETED, TaskStatus.FAILED],
-    default: TaskStatus.PENDING,
-  },
-  price: { type: Number, required: true },
-  originalPath: { type: String, required: true },
-  images: [
-    {
-      resolution: { type: String, required: true },
-      path: { type: String, required: true },
+const taskSchema = new Schema<TaskDocument>(
+  {
+    status: {
+      type: String,
+      enum: [TaskStatus.PENDING, TaskStatus.COMPLETED, TaskStatus.FAILED],
+      default: TaskStatus.PENDING,
     },
-  ],
-});
+    price: { type: Number, required: true },
+    originalPath: { type: String, required: true },
+    images: [
+      {
+        resolution: { type: String, required: true },
+        path: { type: String, required: true },
+      },
+    ],
+  },
+  { timestamps: true }
+);
 
 taskSchema.methods.completeTask = function (
   this: TaskDocument,
@@ -43,4 +48,7 @@ taskSchema.methods.markAsFailed = function (this: TaskDocument): void {
   this.status = TaskStatus.FAILED;
 };
 
-export const TaskModel = mongoose.model<TaskDocument>("Task", taskSchema);
+export const TaskModel: Model<TaskDocument> = mongoose.model<TaskDocument>(
+  "Task",
+  taskSchema
+);
