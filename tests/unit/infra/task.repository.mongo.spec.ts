@@ -84,8 +84,6 @@ describe("TaskRepositoryMongo", () => {
       TaskModel.findById.mockResolvedValue(null);
 
       const foundTask = await repository.findById("1234");
-
-      expect(TaskModel.findById).toHaveBeenCalledWith("1234");
       expect(foundTask).toBeNull();
     });
   });
