@@ -4,6 +4,7 @@ import taskRoutes from "../../../src/infrastructure/routes/task.routes";
 import healthRoutes from "../../../src/infrastructure/routes/health.routes";
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import mongoose from "mongoose";
+import { errorMiddleware } from "../../../src/infrastructure/middlewares/errorHandler";
 
 const mockObjectId = new mongoose.Types.ObjectId();
 // Mock TaskRepository
@@ -35,6 +36,7 @@ const app = express();
 app.use(express.json());
 app.use("/tasks", taskRoutes(taskRepositoryMock, processImageUseCaseMock));
 app.use("/health", healthRoutes);
+app.use(errorMiddleware);
 
 describe("Test Routes", () => {
   beforeEach(() => {
@@ -63,10 +65,7 @@ describe("Test Routes", () => {
   it("should return an error if no originalPath is provided", async () => {
     const response = await request(app).post("/tasks").send({});
     expect(response.status).toBe(400);
-    expect(response.body).toHaveProperty(
-      "message",
-      "Missing originalPath in request body"
-    );
+    expect(response.body).toHaveProperty("message", "originalPath is required");
   });
 
   // GET /tasks/:taskId
