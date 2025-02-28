@@ -32,22 +32,13 @@ describe("GetTaskUseCase", () => {
     expect(result).toEqual(mockTask);
   });
 
-  it("should return null when task is not found", async () => {
+  it("should throw an error when task is not found", async () => {
     (taskRepository.findById as vi.Mock).mockResolvedValue(null);
 
-    const result = await getTaskUseCase.execute("1234");
+    await expect(getTaskUseCase.execute("1234")).rejects.toThrow(
+      "Task not found"
+    );
 
     expect(taskRepository.findById).toHaveBeenCalledWith("1234");
-    expect(result).toBeNull();
-  });
-
-  it("should throw an error if repository throws an error", async () => {
-    (taskRepository.findById as vi.Mock).mockRejectedValue(
-      new Error("Database error")
-    );
-
-    await expect(getTaskUseCase.execute("error-id")).rejects.toThrow(
-      "Could not fetch the task"
-    );
   });
 });

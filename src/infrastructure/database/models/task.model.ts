@@ -1,4 +1,5 @@
 import mongoose, { Schema, Document, Types } from "mongoose";
+import { TaskStatus } from "../../../domain/task.entity";
 
 interface Image {
   resolution: string;
@@ -6,15 +7,20 @@ interface Image {
 }
 
 interface TaskDocument extends Document {
-  status: "pending" | "completed";
+  status: TaskStatus.PENDING | TaskStatus.COMPLETED | TaskStatus.FAILED;
   price: number;
   originalPath: string;
   images: Image[];
   completeTask(this: TaskDocument, images: Image[]): void;
+  markAsFailed(this: TaskDocument): void;
 }
 
 const taskSchema = new Schema<TaskDocument>({
-  status: { type: String, enum: ["pending", "completed"], default: "pending" },
+  status: {
+    type: String,
+    enum: [TaskStatus.PENDING, TaskStatus.COMPLETED, TaskStatus.FAILED],
+    default: TaskStatus.PENDING,
+  },
   price: { type: Number, required: true },
   originalPath: { type: String, required: true },
   images: [
@@ -29,8 +35,12 @@ taskSchema.methods.completeTask = function (
   this: TaskDocument,
   images: Image[]
 ): void {
-  this.status = "completed";
+  this.status = TaskStatus.COMPLETED;
   this.images = images;
+};
+
+taskSchema.methods.markAsFailed = function (this: TaskDocument): void {
+  this.status = TaskStatus.FAILED;
 };
 
 export const TaskModel = mongoose.model<TaskDocument>("Task", taskSchema);

@@ -29,4 +29,8 @@ export class Task {
     this.status = TaskStatus.COMPLETED;
     this.images = images;
   }
+
+  markAsFailed() {
+    this.status = TaskStatus.FAILED;
+  }
 }

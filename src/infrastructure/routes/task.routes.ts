@@ -1,26 +1,35 @@
 import { Router, Request, Response, NextFunction } from "express";
 import { TaskController } from "../controllers/task.controller";
-import { GetTaskUseCase, CreateTaskUseCase } from "../../application/use-cases";
-import { TaskRepositoryMongo } from "../../infrastructure/repositories/task.repository.mongo";
-// Initialize the repository and use cases
-const taskRepository = new TaskRepositoryMongo();
-const getTaskUseCase = new GetTaskUseCase(taskRepository);
-const createTaskUseCase = new CreateTaskUseCase(taskRepository);
+import {
+  GetTaskUseCase,
+  CreateTaskUseCase,
+  ProcessImageUseCase,
+} from "../../application/use-cases";
+import { TaskRepository } from "../../domain/task.repository";
 
-// Pass the use cases to the TaskController
-const taskController = new TaskController(getTaskUseCase, createTaskUseCase);
+export default function taskRoutes(
+  taskRepository: TaskRepository,
+  processImageUseCase: ProcessImageUseCase
+) {
+  const router = Router();
 
-const router = Router();
+  const getTaskUseCase = new GetTaskUseCase(taskRepository);
+  const createTaskUseCase = new CreateTaskUseCase(
+    taskRepository,
+    processImageUseCase
+  );
+  const taskController = new TaskController(getTaskUseCase, createTaskUseCase);
 
-router.get(
-  "/:taskId",
-  async (req: Request, res: Response, next: NextFunction) => {
-    await taskController.getTask(req, res, next);
-  }
-);
+  router.get(
+    "/:taskId",
+    async (req: Request, res: Response, next: NextFunction) => {
+      await taskController.getTask(req, res, next);
+    }
+  );
 
-router.post("/", async (req: Request, res: Response, next: NextFunction) => {
-  await taskController.createTask(req, res, next);
-});
+  router.post("/", async (req: Request, res: Response, next: NextFunction) => {
+    await taskController.createTask(req, res, next);
+  });
 
-export default router;
+  return router;
+}

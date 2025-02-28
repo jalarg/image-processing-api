@@ -1,6 +1,7 @@
 import { describe, it, vi, beforeEach, expect } from "vitest";
 import { TaskController } from "../../../src/infrastructure/controllers/task.controller";
 import { Request, Response } from "express";
+import { AppError } from "../../../src/infrastructure/middlewares/errorHandler";
 
 // Mock implementations of the use cases (getTask and createTask)
 const getTaskUseCase = {
@@ -30,17 +31,16 @@ describe("TaskController", () => {
     controller = new TaskController(getTaskUseCase, createTaskUseCase);
   });
 
-  it("should return 404 if task is not found", async () => {
-    getTaskUseCase.execute.mockResolvedValue(null);
+  it("should call next() with an AppError if task is not found", async () => {
+    const error = new AppError("Task not found", 404);
+    getTaskUseCase.execute.mockRejectedValue(error);
 
     const req = mockRequest({ taskId: "1234" });
     const res = mockResponse();
     const next = vi.fn();
 
     await controller.getTask(req, res, next);
-
-    expect(res.status).toHaveBeenCalledWith(404);
-    expect(res.json).toHaveBeenCalledWith({ message: "Task not found" });
+    expect(next).toHaveBeenCalledWith(error);
   });
 
   it("should return task data if found", async () => {
@@ -68,17 +68,17 @@ describe("TaskController", () => {
     });
   });
 
-  it("should return 400 if originalPath is missing in createTask", async () => {
+  it("should call next() with an AppError if originalPath is missing in createTask", async () => {
+    const error = new AppError("originalPath is required", 400);
+    createTaskUseCase.execute.mockRejectedValue(error);
+
     const req = mockRequest({}, {});
     const res = mockResponse();
     const next = vi.fn();
 
     await controller.createTask(req, res, next);
 
-    expect(res.status).toHaveBeenCalledWith(400);
-    expect(res.json).toHaveBeenCalledWith({
-      message: "Missing originalPath in request body",
-    });
+    expect(next).toHaveBeenCalledWith(error);
   });
 
   it("should create a task successfully", async () => {
