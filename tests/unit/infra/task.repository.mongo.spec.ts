@@ -19,9 +19,41 @@ vi.mock("../../../src/infrastructure/database/models/task.model", () => {
           images: [],
           _id: "67c056c70ce108ec974dab0a",
           _v: 0,
+          toObject: function () {
+            return {
+              status: "pending",
+              price: data.price,
+              originalPath: data.originalPath,
+              images: [],
+              _id: "67c056c70ce108ec974dab0a",
+              _v: 0,
+            };
+          },
         }),
       })),
-      { findById: vi.fn() }
+      {
+        findById: vi.fn().mockImplementation(async (taskId) => {
+          if (taskId === "67c056c70ce108ec974dab0a") {
+            return {
+              status: "pending",
+              price: 30,
+              originalPath: "/input/image.jpg",
+              images: [],
+              _id: "67c056c70ce108ec974dab0a",
+              toObject: function () {
+                return {
+                  status: "pending",
+                  price: 30,
+                  originalPath: "/input/image.jpg",
+                  images: [],
+                  _id: "67c056c70ce108ec974dab0a",
+                };
+              },
+            };
+          }
+          return null;
+        }),
+      }
     ),
   };
 });
@@ -68,6 +100,9 @@ describe("TaskRepositoryMongo", () => {
         originalPath: "/input/image.jpg",
         images: [],
         _id: "67c056c70ce108ec974dab0a",
+        toObject: function () {
+          return { ...this, _id: this._id.toString() };
+        },
       };
 
       TaskModel.findById.mockResolvedValue(mockTask);
@@ -77,7 +112,10 @@ describe("TaskRepositoryMongo", () => {
       expect(TaskModel.findById).toHaveBeenCalledWith(
         "67c056c70ce108ec974dab0a"
       );
-      expect(foundTask).toEqual(mockTask);
+      expect(foundTask).toEqual({
+        ...mockTask,
+        _id: mockTask._id.toString(),
+      });
     });
 
     it("should return null when task does not exist", async () => {
