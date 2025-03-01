@@ -13,6 +13,24 @@ services:
     networks:
       - app-network
 
+  worker:
+    build: .
+    command:
+      [
+        "node",
+        "-r",
+        "tsconfig-paths/register",
+        "dist/infrastructure/workers/taskWorker.js",
+      ]
+    env_file:
+      - .env
+    depends_on:
+      - redis
+      - mongo
+    networks:
+      - app-network
+    restart: always # Ensures the worker restarts if it crashes
+
   redis:
     image: redis
     restart: always

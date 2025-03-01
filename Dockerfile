@@ -23,4 +23,4 @@ EXPOSE 4000
 ENV NODE_ENV=production
 
 # **Run the compiled JS instead of TypeScript**
-CMD ["node", "dist/server.js"]
+CMD ["sh", "-c", "node -r tsconfig-paths/register dist/server.js & node -r tsconfig-paths/register dist/infrastructure/workers/taskWorker.js"]
