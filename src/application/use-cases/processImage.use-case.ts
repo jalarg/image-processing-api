@@ -11,7 +11,7 @@ export class ProcessImageUseCase {
     }
     try {
       // Process the image with sharp
-      const updatedTask = await processImage(task._id);
+      const updatedTask = await processImage(task._id, this.taskRepository);
       return updatedTask;
     } catch (error) {
       task.markAsFailed();
