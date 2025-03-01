@@ -12,7 +12,7 @@ export class TaskController {
       const taskId = req.params.taskId;
       const task = await this.getTaskUseCase.execute(taskId);
       return res.status(200).json({
-        taskId: task._id.toString(),
+        taskId: task._id,
         status: task.status,
         price: task.price,
         images: task.status === "completed" ? task.images : [],
