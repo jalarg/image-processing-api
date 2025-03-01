@@ -7,7 +7,7 @@ import { TaskRepositoryMongo } from "./infrastructure/repositories/task.reposito
 import { ProcessImageUseCase } from "./application/use-cases/processImage.use-case";
 import { TaskRepository } from "./domain/task.repository";
 import createRouter from "./infrastructure/routes/index.routes";
-import { errorMiddleware } from "../src/infrastructure/middlewares/errorHandler";
+import { errorMiddleware } from "./infrastructure/middlewares/errorHandler";
 
 const taskRepository: TaskRepository = new TaskRepositoryMongo();
 const processImageUseCase = new ProcessImageUseCase(taskRepository);
