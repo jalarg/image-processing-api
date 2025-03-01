@@ -3,12 +3,12 @@
     "target": "es2016",
     "module": "commonjs",
     "moduleResolution": "node",
-    "rootDir": "src",
+    "rootDir": "./src",
     "baseUrl": ".",
     "paths": {
-      "*": ["src/*"]
+      "@models/*": ["src/infrastructure/database/models/*"]
     },
-    "outDir": "dist",
+    "outDir": "./dist",
     "isolatedModules": true,
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
