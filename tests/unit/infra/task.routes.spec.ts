@@ -16,7 +16,7 @@ const taskRepositoryMock = {
     price: 25,
     images: [],
   }),
-  findById: vi.fn().mockResolvedValue({
+  optimizedFindById: vi.fn().mockResolvedValue({
     _id: mockObjectId,
     originalPath: "https://example.com/image.jpg",
     status: "pending",

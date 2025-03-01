@@ -9,6 +9,13 @@ export interface TaskImage {
   path: string;
 }
 
+export interface filteredTask {
+  _id?: string;
+  status: TaskStatus;
+  price: number;
+  images: TaskImage[];
+}
+
 export class Task {
   _id?: string;
   status: TaskStatus;

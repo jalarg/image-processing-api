@@ -1,7 +1,22 @@
-import { Task } from "../../domain/task.entity";
+import {
+  Task,
+  TaskStatus,
+  TaskImage,
+  filteredTask,
+} from "../../domain/task.entity";
 import { TaskRepository } from "../../domain/task.repository";
 import { TaskModel } from "../database/models/task.model";
 import mongoose from "mongoose";
+
+type MongoTask = {
+  _id: mongoose.Types.ObjectId;
+  status: TaskStatus;
+  price: number;
+  originalPath: string;
+  images: TaskImage[];
+  updatedAt?: Date;
+  __v: number;
+};
 
 export class TaskRepositoryMongo implements TaskRepository {
   async save(task: Task): Promise<Task> {
@@ -17,6 +32,19 @@ export class TaskRepositoryMongo implements TaskRepository {
     const task = await TaskModel.findById(taskId);
     return task
       ? ({ ...task.toObject(), _id: task._id.toString() } as Task)
+      : null;
+  }
+
+  async optimizedFindById(taskId: string): Promise<filteredTask | null> {
+    if (!mongoose.Types.ObjectId.isValid(taskId)) {
+      return null;
+    }
+    const task = await TaskModel.findById(taskId)
+      .select("status price images")
+      .lean<Pick<MongoTask, "_id" | "status" | "price" | "images">>();
+
+    return task
+      ? ({ ...task, _id: task._id.toString() } as filteredTask)
       : null;
   }
 
