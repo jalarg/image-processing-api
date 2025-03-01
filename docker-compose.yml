@@ -1,0 +1,56 @@
+version: "3.8"
+
+services:
+  api:
+    build: .
+    ports:
+      - "4000:4000"
+    env_file:
+      - .env
+    depends_on:
+      - redis
+      - mongo
+    networks:
+      - app-network
+
+  worker:
+    build: .
+    command:
+      [
+        "node",
+        "-r",
+        "tsconfig-paths/register",
+        "dist/infrastructure/workers/taskWorker.js",
+      ]
+    env_file:
+      - .env
+    depends_on:
+      - redis
+      - mongo
+    networks:
+      - app-network
+    restart: always # Ensures the worker restarts if it crashes
+
+  redis:
+    image: redis
+    restart: always
+    ports:
+      - "6380:6379"
+    networks:
+      - app-network
+
+  mongo:
+    image: mongo
+    restart: always
+    ports:
+      - "27017:27017"
+    networks:
+      - app-network
+    volumes:
+      - mongo-data:/data/db
+
+networks:
+  app-network:
+
+volumes:
+  mongo-data:

@@ -26,6 +26,7 @@ async function startWorker() {
         console.log(`Task ${taskId} completed!`);
       } catch (error) {
         console.error(`Error processing task ${taskId}:`, error);
+        throw error;
       }
     },
     { connection }

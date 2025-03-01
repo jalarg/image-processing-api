@@ -55,7 +55,13 @@ describe("ProcessImageUseCase", () => {
     const result = await processImageUseCase.execute(taskId, imagePath);
 
     expect(taskRepository.findById).toHaveBeenCalledWith(taskId);
-    expect(processImage).toHaveBeenCalledWith(taskId);
+    expect(processImage).toHaveBeenCalledWith(
+      taskId,
+      expect.objectContaining({
+        findById: expect.any(Function),
+        save: expect.any(Function),
+      })
+    );
     expect(taskRepository.save).not.toHaveBeenCalled();
     expect(result).toBe(mockUpdatedTask);
   });
