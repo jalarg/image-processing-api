@@ -29,10 +29,10 @@ export async function processImage(
       console.log(`Resizing to ${resolution}px`);
       const outputPath = getOutputPath(task.originalPath, resolution, md5);
       await sharp(imageBuffer).resize({ width: resolution }).toFile(outputPath);
-
+      const relativePath = outputPath.replace(/^.*\/output\//, "/output/");
       processedImages.push({
         resolution: resolution.toString(),
-        path: outputPath,
+        path: relativePath,
       });
     }
 
