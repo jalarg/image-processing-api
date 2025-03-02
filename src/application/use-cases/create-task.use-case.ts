@@ -1,14 +1,10 @@
-import { Task } from "../../domain/task.entity";
-import { TaskRepository } from "../../domain/task.repository";
-import { ProcessImageUseCase } from "./processImage.use-case";
+import { Task } from "../../domain/entities/task.entity";
+import { TaskRepository } from "../../domain/repositories/task.repository";
 import { AppError } from "../../infrastructure/middlewares/errorHandler";
 import { taskQueue } from "../../infrastructure/queues/taskQueue";
 
 export class CreateTaskUseCase {
-  constructor(
-    private taskRepository: TaskRepository,
-    private processImageUseCase: ProcessImageUseCase
-  ) {}
+  constructor(private taskRepository: TaskRepository) {}
 
   async execute(originalPath: string): Promise<Task> {
     if (!originalPath) {
