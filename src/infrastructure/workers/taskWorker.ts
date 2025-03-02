@@ -30,7 +30,7 @@ async function startWorker() {
         throw error;
       }
     },
-    { connection }
+    { connection, concurrency: 15, limiter: { max: 15, duration: 1000 } }
   );
   console.log("Worker started, waiting for jobs...");
 }
