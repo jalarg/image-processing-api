@@ -1,18 +1,20 @@
 import { TaskRepository } from "../../domain/repositories/task.repository";
 import { filteredTask } from "../../domain/entities/task.entity";
 import { AppError } from "../../infrastructure/middlewares/errorHandler";
-import { getCache, setCache } from "../../infrastructure/redis/cache";
+import { TaskCacheService } from "../../domain/services/TaskCacheService";
 
 export class GetTaskUseCase {
-  constructor(private readonly taskRepository: TaskRepository) {}
+  constructor(
+    private readonly taskRepository: TaskRepository,
+    private readonly taskCacheService: TaskCacheService
+  ) {}
 
   public async execute(taskId: string): Promise<filteredTask> {
     if (!taskId) {
       throw new AppError("Task ID is required", 400);
     }
-    // Check cache
-    const cacheKey = `cache:task:${taskId}`;
-    const cachedTask = await getCache(cacheKey);
+    // Check cache first
+    const cachedTask = await this.taskCacheService.getTaskFromCache(taskId);
     if (cachedTask) {
       console.log("Servido desde Redis");
       return cachedTask;
@@ -23,7 +25,7 @@ export class GetTaskUseCase {
       throw new AppError("Task not found", 404);
     }
     // Set cache with TTL 30min
-    await setCache(cacheKey, task, 1800);
+    await this.taskCacheService.setTaskInCache(taskId, task);
     return task;
   }
 }

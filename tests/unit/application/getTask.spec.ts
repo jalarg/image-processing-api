@@ -5,22 +5,24 @@ import {
   TaskStatus,
 } from "../../../src/domain/entities/task.entity";
 import { TaskRepository } from "../../../src/domain/repositories/task.repository";
-import { getCache, setCache } from "../../../src/infrastructure/redis/cache";
-
-vi.mock("../../../src/infrastructure/redis/cache", () => ({
-  getCache: vi.fn(),
-  setCache: vi.fn(),
-}));
+import { TaskCacheService } from "../../../src/domain/services/TaskCacheService";
 
 describe("GetTaskUseCase", () => {
   let taskRepository: TaskRepository;
   let getTaskUseCase: GetTaskUseCase;
+  let taskCacheService: TaskCacheService;
 
   beforeEach(() => {
     taskRepository = {
       optimizedFindById: vi.fn(),
     } as unknown as TaskRepository;
-    getTaskUseCase = new GetTaskUseCase(taskRepository);
+
+    taskCacheService = {
+      getTaskFromCache: vi.fn(),
+      setTaskInCache: vi.fn(),
+    } as unknown as TaskCacheService;
+
+    getTaskUseCase = new GetTaskUseCase(taskRepository, taskCacheService);
   });
 
   it("Should return a task from cache if it exists", async () => {
@@ -35,11 +37,11 @@ describe("GetTaskUseCase", () => {
       ],
     };
 
-    (getCache as vi.Mock).mockResolvedValue(mockTask);
+    (taskCacheService.getTaskFromCache as vi.Mock).mockResolvedValue(mockTask);
 
     const result = await getTaskUseCase.execute(taskId);
 
-    expect(getCache).toHaveBeenCalledWith(`cache:task:${taskId}`);
+    expect(taskCacheService.getTaskFromCache).toHaveBeenCalledWith(taskId);
   });
 
   it("should return a task when found", async () => {
@@ -55,17 +57,13 @@ describe("GetTaskUseCase", () => {
     };
 
     (taskRepository.optimizedFindById as vi.Mock).mockResolvedValue(mockTask);
-    (getCache as vi.Mock).mockResolvedValue(null);
-    (setCache as vi.Mock).mockResolvedValue(null);
+    const setCache = taskCacheService.setTaskInCache as vi.Mock;
+    const getCache = taskCacheService.getTaskFromCache as vi.Mock;
     const result = await getTaskUseCase.execute(taskId);
 
     expect(taskRepository.optimizedFindById).toHaveBeenCalledWith(taskId);
     expect(result).toEqual(mockTask);
-    expect(setCache).toHaveBeenCalledWith(
-      `cache:task:${taskId}`,
-      mockTask,
-      1800
-    );
+    expect(setCache).toHaveBeenCalledWith(taskId, mockTask);
   });
 
   it("should throw an error when task is not found", async () => {
