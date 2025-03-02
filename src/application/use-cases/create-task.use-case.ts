@@ -22,7 +22,12 @@ export class CreateTaskUseCase {
       throw new AppError("Task ID is required", 400);
     }
     console.log("Adding job to queue with data:", { taskId, originalPath });
-    await taskQueue.add("processImage", { taskId });
+    await taskQueue.add(
+      "processImage",
+      { taskId },
+      { attempts: 3, backoff: 5000 }
+    );
+
     console.log("Job added successfully to queue");
     return savedTask;
   }
