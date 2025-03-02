@@ -1,0 +1,25 @@
+config:
+  target: "http://localhost:4000"
+  phases:
+    - name: "Warm-up"
+      duration: 10
+      arrivalRate: 20 # Inicio moderado
+    - name: "Ramp-up"
+      duration: 15
+      arrivalRate: 50 # Incremento progresivo
+    - name: "Sustained Load"
+      duration: 20
+      arrivalRate: 100 # Mantener carga estable
+    - name: "Stress Test"
+      duration: 10
+      arrivalRate: 200 # Carga alta, pero sin exagerar
+    - name: "Cooldown"
+      duration: 10
+      arrivalRate: 50 # Descenso controlado
+  variables:
+    taskId: "{{ process.env.TASK_ID }}"
+
+scenarios:
+  - flow:
+      - get:
+          url: "/api/tasks/{{ taskId }}"
