@@ -31,6 +31,9 @@ const taskSchema = new Schema<TaskDocument>(
   { timestamps: true }
 );
 
+taskSchema.index({ updatedAt: -1 });
+taskSchema.index({ createdAt: -1 });
+
 taskSchema.methods.completeTask = function (
   images: { resolution: string; path: string }[]
 ): void {
