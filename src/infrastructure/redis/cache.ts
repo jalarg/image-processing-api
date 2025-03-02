@@ -1,5 +1,5 @@
 import { redisClient } from "./redis";
-import { filteredTask } from "src/domain/task.entity";
+import { filteredTask } from "src/domain/entities/task.entity";
 
 export async function getCache(key: string): Promise<filteredTask | null> {
   try {

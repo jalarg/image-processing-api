@@ -1,5 +1,5 @@
-import { TaskRepository } from "../../domain/task.repository";
-import { filteredTask } from "../../domain/task.entity";
+import { TaskRepository } from "../../domain/repositories/task.repository";
+import { filteredTask } from "../../domain/entities/task.entity";
 import { AppError } from "../../infrastructure/middlewares/errorHandler";
 import { getCache, setCache } from "../../infrastructure/redis/cache";
 

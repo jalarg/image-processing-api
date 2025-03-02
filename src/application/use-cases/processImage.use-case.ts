@@ -1,4 +1,4 @@
-import { TaskRepository } from "../../domain/task.repository";
+import { TaskRepository } from "../../domain/repositories/task.repository";
 import { processImage } from "../../helpers/processImage";
 
 export class ProcessImageUseCase {

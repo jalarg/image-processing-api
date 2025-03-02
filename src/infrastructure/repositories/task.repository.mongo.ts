@@ -4,8 +4,8 @@ import {
   TaskImage,
   filteredTask,
   filteredByDateTask,
-} from "../../domain/task.entity";
-import { TaskRepository } from "../../domain/task.repository";
+} from "../../domain/entities/task.entity";
+import { TaskRepository } from "../../domain/repositories/task.repository";
 import { TaskModel } from "../database/models/task.model";
 import mongoose from "mongoose";
 

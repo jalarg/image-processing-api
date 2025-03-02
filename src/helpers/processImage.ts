@@ -1,5 +1,5 @@
 import "module-alias/register";
-import { TaskRepository } from "../domain/task.repository";
+import { TaskRepository } from "../domain/repositories/task.repository";
 import axios from "axios";
 import sharp from "sharp";
 import crypto from "crypto";

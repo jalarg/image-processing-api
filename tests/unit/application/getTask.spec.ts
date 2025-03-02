@@ -1,7 +1,10 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { GetTaskUseCase } from "../../../src/application/use-cases/get-task.use-case";
-import { filteredTask, TaskStatus } from "../../../src/domain/task.entity";
-import { TaskRepository } from "../../../src/domain/task.repository";
+import {
+  filteredTask,
+  TaskStatus,
+} from "../../../src/domain/entities/task.entity";
+import { TaskRepository } from "../../../src/domain/repositories/task.repository";
 import { getCache, setCache } from "../../../src/infrastructure/redis/cache";
 
 vi.mock("../../../src/infrastructure/redis/cache", () => ({

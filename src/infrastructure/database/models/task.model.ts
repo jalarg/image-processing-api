@@ -1,5 +1,5 @@
 import mongoose, { Schema, Document, Types } from "mongoose";
-import { TaskStatus } from "../../../domain/task.entity";
+import { TaskStatus } from "../../../domain/entities/task.entity";
 
 export interface TaskDocument extends Document {
   _id: Types.ObjectId;

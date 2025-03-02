@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { Task, TaskStatus } from "../../../src/domain/task.entity";
+import { Task, TaskStatus } from "../../../src/domain/entities/task.entity";
 
 describe("Task Entity", () => {
   it("should create a new task with pending status", () => {

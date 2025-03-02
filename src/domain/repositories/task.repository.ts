@@ -1,4 +1,4 @@
-import { Task, filteredTask } from "./task.entity";
+import { Task, filteredTask } from "../entities/task.entity";
 
 export interface TaskRepository {
   save(task: Task): Promise<Task>;
