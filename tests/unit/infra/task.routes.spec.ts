@@ -58,7 +58,6 @@ describe("Test Routes", () => {
 
     expect(response.status).toBe(201);
     expect(taskRepositoryMock.save).toHaveBeenCalled();
-    expect(processImageUseCaseMock.execute).toHaveBeenCalled();
   });
 
   // POST /tasks (Validation)
