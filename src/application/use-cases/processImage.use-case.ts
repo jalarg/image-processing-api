@@ -4,7 +4,7 @@ import { processImage } from "../../helpers/processImage";
 export class ProcessImageUseCase {
   constructor(private readonly taskRepository: TaskRepository) {}
 
-  async execute(taskId: string, imagePath: string): Promise<any> {
+  async execute(taskId: string): Promise<any> {
     const task = await this.taskRepository.findById(taskId);
     if (!task || !task._id) {
       throw new Error("Task not found");

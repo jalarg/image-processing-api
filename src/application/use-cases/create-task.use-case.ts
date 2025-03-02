@@ -24,8 +24,6 @@ export class CreateTaskUseCase {
     console.log("Adding job to queue with data:", { taskId, originalPath });
     await taskQueue.add("processImage", { taskId });
     console.log("Job added successfully to queue");
-    await this.processImageUseCase.execute(taskId, originalPath);
-
     return savedTask;
   }
 }

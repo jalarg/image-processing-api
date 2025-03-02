@@ -1,7 +1,7 @@
 import { Worker } from "bullmq";
 import Redis from "ioredis";
 import { connectDB } from "../database/db";
-import { processImage } from "../../helpers/processImage";
+import { ProcessImageUseCase } from "../../application/use-cases/processImage.use-case";
 import { TaskRepositoryMongo } from "../../infrastructure/repositories/task.repository.mongo";
 
 const connection = new Redis({
@@ -15,6 +15,7 @@ async function startWorker() {
   await connectDB();
 
   const taskRepository = new TaskRepositoryMongo();
+  const processImageUseCase = new ProcessImageUseCase(taskRepository);
   const worker = new Worker(
     "imageProcessing",
     async (job) => {
@@ -22,7 +23,7 @@ async function startWorker() {
 
       try {
         console.log(`Processing image for task: ${taskId}`);
-        await processImage(taskId, taskRepository);
+        await processImageUseCase.execute(taskId);
         console.log(`Task ${taskId} completed!`);
       } catch (error) {
         console.error(`Error processing task ${taskId}:`, error);
