@@ -3,15 +3,20 @@ import {
   CreateTaskUseCase,
   ProcessImageUseCase,
 } from "../../../src/application/use-cases/index";
-import { Task } from "../../../src/domain/task.entity";
-import { TaskRepository } from "../../../src/domain/task.repository";
+import { Task } from "../../../src/domain/entities/task.entity";
+import { TaskRepository } from "../../../src/domain/repositories/task.repository";
+import { TaskQueueService } from "../../../src/domain/services/TaskQueueService";
 
 describe("CreateTaskUseCase", () => {
   let taskRepository: TaskRepository;
   let createTaskUseCase: CreateTaskUseCase;
   let processImageUseCase: ProcessImageUseCase;
+  let taskQueueService: TaskQueueService;
 
   beforeEach(() => {
+    taskQueueService = {
+      addTaskToQueue: vi.fn().mockResolvedValue(undefined),
+    } as unknown as TaskQueueService;
     taskRepository = {
       save: vi.fn().mockImplementation(async (task: Task) => ({
         ...task,
@@ -21,10 +26,7 @@ describe("CreateTaskUseCase", () => {
     processImageUseCase = {
       execute: vi.fn().mockResolvedValue(undefined),
     } as unknown as ProcessImageUseCase;
-    createTaskUseCase = new CreateTaskUseCase(
-      taskRepository,
-      processImageUseCase
-    );
+    createTaskUseCase = new CreateTaskUseCase(taskRepository, taskQueueService);
   });
 
   it("should successfully create a task", async () => {
