@@ -2,7 +2,9 @@ version: "3.8"
 
 services:
   api:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile
     ports:
       - "4000:4000"
     env_file:
@@ -12,16 +14,17 @@ services:
       - mongo
     networks:
       - app-network
+    volumes:
+      - .:/app
+      - /app/node_modules
+    command: npm run dev
+    environment:
+      - NODE_ENV=development
 
   worker:
-    build: .
-    command:
-      [
-        "node",
-        "-r",
-        "tsconfig-paths/register",
-        "dist/infrastructure/workers/taskWorker.js",
-      ]
+    build:
+      context: .
+      dockerfile: Dockerfile.worker
     env_file:
       - .env
     depends_on:
@@ -29,7 +32,13 @@ services:
       - mongo
     networks:
       - app-network
-    restart: always # Ensures the worker restarts if it crashes
+    restart: always
+    volumes:
+      - .:/app
+      - /app/node_modules
+    command: npm run start:worker
+    environment:
+      - NODE_ENV=development
 
   redis:
     image: redis

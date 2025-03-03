@@ -1,17 +1,13 @@
 import { Router } from "express";
 import healthRoutes from "./health.routes";
 import taskRoutes from "./task.routes";
-import { TaskRepository } from "../../domain/task.repository";
-import { ProcessImageUseCase } from "../../application/use-cases";
+import { TaskRepository } from "../../domain/repositories/task.repository";
 
-export default function createRouter(
-  taskRepository: TaskRepository,
-  processImageUseCase: ProcessImageUseCase
-) {
+export default function createRouter(taskRepository: TaskRepository) {
   const router = Router();
 
   router.use("/health", healthRoutes);
-  router.use("/tasks", taskRoutes(taskRepository, processImageUseCase));
+  router.use("/tasks", taskRoutes(taskRepository));
 
   return router;
 }

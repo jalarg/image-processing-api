@@ -10,10 +10,20 @@ export interface TaskImage {
 }
 
 export interface filteredTask {
-  _id?: string;
+  _id: string;
   status: TaskStatus;
   price: number;
   images: TaskImage[];
+  updatedAt?: Date;
+  createdAt?: Date;
+}
+
+export interface filteredByDateTask {
+  _id: string;
+  status: TaskStatus;
+  price: number;
+  images: TaskImage[];
+  createdAt: Date;
 }
 
 export class Task {

@@ -1,22 +1,14 @@
 import "module-alias/register";
-import { TaskRepository } from "../domain/task.repository";
 import axios from "axios";
 import sharp from "sharp";
 import crypto from "crypto";
 import { getOutputPath } from "./getOutputPath";
 
 export async function processImage(
-  taskId: string,
-  taskRepository: TaskRepository
-) {
+  originalPath: string
+): Promise<{ resolution: string; path: string }[]> {
   try {
-    const task = await taskRepository.findById(taskId);
-    console.log(`Processing image for task: ${taskId}`);
-    if (!task) {
-      throw new Error(`Task not found: ${taskId}`);
-    }
-
-    const response = await axios.get(task.originalPath, {
+    const response = await axios.get(originalPath, {
       responseType: "arraybuffer",
     });
     const imageBuffer = Buffer.from(response.data);
@@ -27,7 +19,7 @@ export async function processImage(
 
     for (const resolution of resolutions) {
       console.log(`Resizing to ${resolution}px`);
-      const outputPath = getOutputPath(task.originalPath, resolution, md5);
+      const outputPath = getOutputPath(originalPath, resolution, md5);
       await sharp(imageBuffer).resize({ width: resolution }).toFile(outputPath);
       const relativePath = outputPath.replace(/^.*\/output\//, "/output/");
       processedImages.push({
@@ -35,15 +27,8 @@ export async function processImage(
         path: relativePath,
       });
     }
-
-    // Use repository method to update the task as completed
-    await taskRepository.completeTask(taskId, processedImages);
-    console.log(`Task ${taskId} completed!`);
+    return processedImages;
   } catch (error) {
-    console.error(`Error processing task ${taskId}:`, error);
-    // Update task as failed using repository method
-    await taskRepository.updateTaskStatus(taskId, "failed");
-
     throw new Error("Could not process the image");
   }
 }

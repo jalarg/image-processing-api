@@ -1,5 +1,5 @@
 import mongoose, { Schema, Document, Types } from "mongoose";
-import { TaskStatus } from "../../../domain/task.entity";
+import { TaskStatus } from "../../../domain/entities/task.entity";
 
 export interface TaskDocument extends Document {
   _id: Types.ObjectId;
@@ -30,6 +30,9 @@ const taskSchema = new Schema<TaskDocument>(
   },
   { timestamps: true }
 );
+
+taskSchema.index({ updatedAt: -1 });
+taskSchema.index({ createdAt: -1 });
 
 taskSchema.methods.completeTask = function (
   images: { resolution: string; path: string }[]

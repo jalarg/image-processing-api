@@ -4,13 +4,11 @@ import * as dotenv from "dotenv";
 import swaggerUi from "swagger-ui-express";
 import swaggerJSDoc from "swagger-jsdoc";
 import { TaskRepositoryMongo } from "./infrastructure/repositories/task.repository.mongo";
-import { ProcessImageUseCase } from "./application/use-cases/processImage.use-case";
-import { TaskRepository } from "./domain/task.repository";
+import { TaskRepository } from "./domain/repositories/task.repository";
 import createRouter from "./infrastructure/routes/index.routes";
 import { errorMiddleware } from "./infrastructure/middlewares/errorHandler";
 
 const taskRepository: TaskRepository = new TaskRepositoryMongo();
-const processImageUseCase = new ProcessImageUseCase(taskRepository);
 
 dotenv.config();
 // Create an express application
@@ -38,7 +36,7 @@ const swagger = swaggerJSDoc(swaggerOptions);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swagger));
 
 // Add routes including health check
-app.use("/api", createRouter(taskRepository, processImageUseCase));
+app.use("/api", createRouter(taskRepository));
 
 // Add error handling middleware
 app.use(errorMiddleware);

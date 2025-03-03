@@ -1,13 +1,12 @@
-import { Task } from "../../domain/task.entity";
-import { TaskRepository } from "../../domain/task.repository";
-import { ProcessImageUseCase } from "./processImage.use-case";
+import { Task } from "../../domain/entities/task.entity";
+import { TaskRepository } from "../../domain/repositories/task.repository";
 import { AppError } from "../../infrastructure/middlewares/errorHandler";
-import { taskQueue } from "../../infrastructure/queues/taskQueue";
+import { TaskQueueService } from "../../domain/services/TaskQueueService";
 
 export class CreateTaskUseCase {
   constructor(
     private taskRepository: TaskRepository,
-    private processImageUseCase: ProcessImageUseCase
+    private taskQueueService: TaskQueueService
   ) {}
 
   async execute(originalPath: string): Promise<Task> {
@@ -22,10 +21,9 @@ export class CreateTaskUseCase {
       throw new AppError("Task ID is required", 400);
     }
     console.log("Adding job to queue with data:", { taskId, originalPath });
-    await taskQueue.add("processImage", { taskId });
-    console.log("Job added successfully to queue");
-    await this.processImageUseCase.execute(taskId, originalPath);
+    await this.taskQueueService.addTaskToQueue(taskId, originalPath);
 
+    console.log("Job added successfully to queue");
     return savedTask;
   }
 }

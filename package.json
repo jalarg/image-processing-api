@@ -8,6 +8,8 @@
     "test:watch": "vitest --watch",
     "test:coverage": "vitest --coverage",
     "test:integration": "vitest run tests/integration/task.routes.spec.ts --silent",
+    "test:load": "export $(grep -v '^#' .env | xargs) && k6 run tests/performance/get-task-load-test.js",
+    "test:stress": "export $(grep -v '^#' .env | xargs) && npx artillery run tests/performance/stress-test.yml",
     "dev": "nodemon -r ts-node/register -r tsconfig-paths/register src/server.ts",
     "build": "tsc",
     "start": "node -r tsconfig-paths/register dist/server.js",
@@ -29,7 +31,8 @@
     "sharp": "^0.33.5",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1",
-    "tsconfig-paths": "^4.2.0"
+    "tsconfig-paths": "^4.2.0",
+    "ts-node": "^10.9.2"
   },
   "devDependencies": {
     "@types/cors": "^2.8.17",
@@ -41,7 +44,6 @@
     "mongodb-memory-server": "^10.1.4",
     "nodemon": "^3.1.9",
     "supertest": "^7.0.0",
-    "ts-node": "^10.9.2",
     "typescript": "^5.7.3",
     "vitest": "^3.0.7"
   },
