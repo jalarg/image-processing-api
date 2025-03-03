@@ -2,8 +2,8 @@ import { Router, Request, Response, NextFunction } from "express";
 import { TaskController } from "../controllers/task.controller";
 import { GetTaskUseCase, CreateTaskUseCase } from "../../application/use-cases";
 import { TaskRepository } from "../../domain/repositories/task.repository";
-import { TaskCacheService } from "../../domain/services/TaskCacheService";
-import { TaskQueueService } from "../../domain/services/TaskQueueService";
+import { TaskCacheService } from "../services/TaskCacheService";
+import { TaskQueueService } from "../services/TaskQueueService";
 
 export default function taskRoutes(taskRepository: TaskRepository) {
   const router = Router();

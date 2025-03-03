@@ -1,7 +1,7 @@
 import { TaskRepository } from "../../domain/repositories/task.repository";
 import { filteredTask } from "../../domain/entities/task.entity";
 import { AppError } from "../../infrastructure/middlewares/errorHandler";
-import { TaskCacheService } from "../../domain/services/TaskCacheService";
+import { TaskCacheService } from "../../infrastructure/services/TaskCacheService";
 
 export class GetTaskUseCase {
   constructor(

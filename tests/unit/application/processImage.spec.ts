@@ -1,49 +1,54 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { ProcessImageUseCase } from "../../../src/application/use-cases/processImage.use-case";
 import { TaskRepository } from "../../../src/domain/repositories/task.repository";
+import { ImageProcessingService } from "../../../src/infrastructure/services/ImageProcessingService";
 import { Task } from "../../../src/domain/entities/task.entity";
-import { ImageProcessingService } from "../../../src/domain/services/ImageProcessingService";
-import { processImage } from "../../../src/helpers/processImage";
 
-vi.mock("../../../src/helpers/processImage", () => ({
-  processImage: vi.fn(),
-}));
 describe("ProcessImageUseCase", () => {
   let taskRepository: TaskRepository;
-  let processImageUseCase: ProcessImageUseCase;
   let imageProcessingService: ImageProcessingService;
+  let processImageUseCase: ProcessImageUseCase;
 
   beforeEach(() => {
     taskRepository = {
       findById: vi.fn(),
-      save: vi.fn(),
     } as unknown as TaskRepository;
-    imageProcessingService = new ImageProcessingService(taskRepository);
+
+    imageProcessingService = {
+      process: vi.fn(),
+    } as unknown as ImageProcessingService;
+
     processImageUseCase = new ProcessImageUseCase(
       taskRepository,
       imageProcessingService
     );
   });
 
-  it("should mark task as failed and throw an error if processing fails", async () => {
+  it("should call process() when a valid task is found", async () => {
     const taskId = "67c0452f0e6b87df0074d3f9";
-    const imagePath = "https://example.com/image.jpg";
     const mockTask = {
       _id: taskId,
-      originalPath: imagePath,
-      status: "pending",
-      markAsFailed: vi.fn(),
+      originalPath: "https://example.com/image.jpg",
     } as unknown as Task;
 
     (taskRepository.findById as vi.Mock).mockResolvedValue(mockTask);
-    (vi.mocked(processImage) as vi.Mock).mockRejectedValue(
-      new Error("Processing error")
-    );
+
+    await processImageUseCase.execute(taskId);
+
+    expect(taskRepository.findById).toHaveBeenCalledWith(taskId);
+    expect(imageProcessingService.process).toHaveBeenCalledWith(mockTask);
+  });
+
+  it("should throw an error if the task is not found", async () => {
+    const taskId = "67c0452f0e6b87df0074d3f9";
+
+    (taskRepository.findById as vi.Mock).mockResolvedValue(null);
 
     await expect(processImageUseCase.execute(taskId)).rejects.toThrow(
-      "Processing error"
+      "Task not found"
     );
-    expect(mockTask.markAsFailed).toHaveBeenCalled();
-    expect(taskRepository.save).toHaveBeenCalledWith(mockTask);
+
+    expect(taskRepository.findById).toHaveBeenCalledWith(taskId);
+    expect(imageProcessingService.process).not.toHaveBeenCalled();
   });
 });

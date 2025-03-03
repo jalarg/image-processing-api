@@ -1,9 +1,9 @@
-import { taskQueue } from "../../infrastructure/queues/taskQueue";
+import { taskQueue } from "../queues/taskQueue";
 
 export class TaskQueueService {
   async addTaskToQueue(taskId: string, originalPath: string): Promise<void> {
     try {
-      await taskQueue.add(
+      const job = await taskQueue.add(
         "imageProcessing",
         { taskId, originalPath },
         {
@@ -13,7 +13,9 @@ export class TaskQueueService {
           removeOnFail: false,
         }
       );
+      console.log(`Job added to queue: ${job.id}`);
     } catch (error) {
+      console.error(`Failed to add task ${taskId} to queue:`, error);
       throw new Error(`Failed to add task ${taskId} to queue: ${error}`);
     }
   }
