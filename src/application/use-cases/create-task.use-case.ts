@@ -1,12 +1,12 @@
 import { Task } from "../../domain/entities/task.entity";
 import { TaskRepository } from "../../domain/repositories/task.repository";
 import { AppError } from "../../infrastructure/middlewares/errorHandler";
-import { TaskQueueService } from "../../domain/services/TaskQueueService";
+import { ITaskQueueService } from "../../domain/services/ITaskQueueService";
 
 export class CreateTaskUseCase {
   constructor(
     private taskRepository: TaskRepository,
-    private taskQueueService: TaskQueueService
+    private taskQueueService: ITaskQueueService
   ) {}
 
   async execute(originalPath: string): Promise<Task> {
