@@ -2,7 +2,7 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import { ProcessImageUseCase } from "../../../src/application/use-cases/processImage.use-case";
 import { TaskRepository } from "../../../src/domain/repositories/task.repository";
 import { Task } from "../../../src/domain/entities/task.entity";
-import { ImageProcessingService } from "../../../src/domain/services/ImageProcessingService";
+import { ImageProcessingService } from "../../../src/infrastructure/services/ImageProcessingService";
 import { processImage } from "../../../src/helpers/processImage";
 
 vi.mock("../../../src/helpers/processImage", () => ({

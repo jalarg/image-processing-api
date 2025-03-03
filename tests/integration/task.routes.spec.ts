@@ -8,7 +8,7 @@ import { describe, it, expect, beforeAll, afterAll, beforeEach } from "vitest";
 import { TaskRepositoryMongo } from "../../src/infrastructure/repositories/task.repository.mongo";
 import { ProcessImageUseCase } from "../../src/application/use-cases/processImage.use-case";
 import { taskQueue } from "../../src/infrastructure/queues/taskQueue";
-import { ImageProcessingService } from "../../src/domain/services/ImageProcessingService";
+import { ImageProcessingService } from "../../src/infrastructure/services/ImageProcessingService";
 import { Worker } from "bullmq";
 import { redisClient } from "../../src/infrastructure/redis/redis";
 
