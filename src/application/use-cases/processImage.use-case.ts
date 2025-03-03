@@ -1,5 +1,5 @@
 import { TaskRepository } from "../../domain/repositories/task.repository";
-import { ImageProcessingService } from "../../domain/services/ImageProcessingService";
+import { ImageProcessingService } from "../../infrastructure/services/ImageProcessingService";
 
 export class ProcessImageUseCase {
   constructor(

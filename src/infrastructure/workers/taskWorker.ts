@@ -2,7 +2,7 @@ import { Worker } from "bullmq";
 import { connectDB } from "../database/db";
 import { ProcessImageUseCase } from "../../application/use-cases/processImage.use-case";
 import { TaskRepositoryMongo } from "../../infrastructure/repositories/task.repository.mongo";
-import { ImageProcessingService } from "../../domain/services/ImageProcessingService";
+import { ImageProcessingService } from "../services/ImageProcessingService";
 import { redisClient } from "../redis/redis";
 
 async function startWorker() {

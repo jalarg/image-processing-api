@@ -1,6 +1,6 @@
 import { processImage } from "../../helpers/processImage";
-import { Task } from "../entities/task.entity";
-import { TaskRepository } from "../repositories/task.repository";
+import { Task } from "../../domain/entities/task.entity";
+import { TaskRepository } from "../../domain/repositories/task.repository";
 
 export class ImageProcessingService {
   constructor(private readonly taskRepository: TaskRepository) {}
