@@ -1,22 +1,17 @@
 import { TaskRepository } from "../../domain/repositories/task.repository";
-import { processImage } from "../../helpers/processImage";
+import { ImageProcessingService } from "../../domain/services/ImageProcessingService";
 
 export class ProcessImageUseCase {
-  constructor(private readonly taskRepository: TaskRepository) {}
+  constructor(
+    private readonly taskRepository: TaskRepository,
+    private readonly imageProcessingService: ImageProcessingService
+  ) {}
 
-  async execute(taskId: string): Promise<any> {
+  async execute(taskId: string): Promise<void> {
     const task = await this.taskRepository.findById(taskId);
     if (!task || !task._id) {
       throw new Error("Task not found");
     }
-    try {
-      // Process the image with sharp
-      const updatedTask = await processImage(task._id, this.taskRepository);
-      return updatedTask;
-    } catch (error) {
-      task.markAsFailed();
-      await this.taskRepository.save(task);
-      throw new Error("Could not process the image");
-    }
+    await this.imageProcessingService.process(task);
   }
 }

@@ -3,6 +3,7 @@ import Redis from "ioredis";
 import { connectDB } from "../database/db";
 import { ProcessImageUseCase } from "../../application/use-cases/processImage.use-case";
 import { TaskRepositoryMongo } from "../../infrastructure/repositories/task.repository.mongo";
+import { ImageProcessingService } from "../../domain/services/ImageProcessingService";
 
 const connection = new Redis({
   host: process.env.REDIS_HOST || "localhost",
@@ -15,7 +16,11 @@ async function startWorker() {
   await connectDB();
 
   const taskRepository = new TaskRepositoryMongo();
-  const processImageUseCase = new ProcessImageUseCase(taskRepository);
+  const imageProcessingService = new ImageProcessingService(taskRepository);
+  const processImageUseCase = new ProcessImageUseCase(
+    taskRepository,
+    imageProcessingService
+  );
   const worker = new Worker(
     "imageProcessing",
     async (job) => {
