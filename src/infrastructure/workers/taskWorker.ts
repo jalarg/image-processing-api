@@ -1,16 +1,9 @@
 import { Worker } from "bullmq";
-import Redis from "ioredis";
 import { connectDB } from "../database/db";
 import { ProcessImageUseCase } from "../../application/use-cases/processImage.use-case";
 import { TaskRepositoryMongo } from "../../infrastructure/repositories/task.repository.mongo";
 import { ImageProcessingService } from "../../domain/services/ImageProcessingService";
-
-const connection = new Redis({
-  host: process.env.REDIS_HOST || "localhost",
-  port: parseInt(process.env.REDIS_PORT || "6380"),
-  db: parseInt(process.env.REDIS_DB || "0"),
-  maxRetriesPerRequest: null,
-});
+import { redisClient } from "../redis/redis";
 
 async function startWorker() {
   await connectDB();
@@ -25,17 +18,15 @@ async function startWorker() {
     "imageProcessing",
     async (job) => {
       const { taskId } = job.data;
-
-      try {
-        console.log(`Processing image for task: ${taskId}`);
-        await processImageUseCase.execute(taskId);
-        console.log(`Task ${taskId} completed!`);
-      } catch (error) {
-        console.error(`Error processing task ${taskId}:`, error);
-        throw error;
-      }
+      console.log(`Processing job: ${job.id} (taskId: ${taskId})`);
+      await processImageUseCase.execute(taskId);
+      console.log(`Job ${job.id} (Task ${taskId}) completed!`);
     },
-    { connection, concurrency: 15, limiter: { max: 15, duration: 1000 } }
+    {
+      connection: redisClient,
+      concurrency: 15,
+      limiter: { max: 15, duration: 1000 },
+    }
   );
   console.log("Worker started, waiting for jobs...");
 }
