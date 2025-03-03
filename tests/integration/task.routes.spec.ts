@@ -10,12 +10,16 @@ import { ProcessImageUseCase } from "../../src/application/use-cases/processImag
 import { taskQueue } from "../../src/infrastructure/queues/taskQueue";
 import { ImageProcessingService } from "../../src/infrastructure/services/ImageProcessingService";
 import { Worker } from "bullmq";
+import { processImage } from "../../src/helpers/processImage";
 import { redisClient } from "../../src/infrastructure/redis/redis";
 
 // Set up Express app
 const app = express();
 const taskRepository = new TaskRepositoryMongo();
-const imageProcessingService = new ImageProcessingService(taskRepository);
+const imageProcessingService = new ImageProcessingService(
+  taskRepository,
+  processImage
+);
 const processImageUseCase = new ProcessImageUseCase(
   taskRepository,
   imageProcessingService
