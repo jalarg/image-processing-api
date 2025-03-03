@@ -1,7 +1,8 @@
-import { getCache, setCache } from "../../infrastructure/redis/cache";
+import { getCache, setCache } from "../redis/cache";
+import { filteredTask } from "../../domain/entities/task.entity";
 
 export class TaskCacheService {
-  async getTaskFromCache(taskId: string): Promise<any | null> {
+  async getTaskFromCache(taskId: string): Promise<filteredTask | null> {
     const cacheKey = `cache:task:${taskId}`;
     try {
       return await getCache(cacheKey);
