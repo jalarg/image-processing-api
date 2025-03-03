@@ -4,12 +4,16 @@ import { ProcessImageUseCase } from "../../application/use-cases/processImage.us
 import { TaskRepositoryMongo } from "../../infrastructure/repositories/task.repository.mongo";
 import { ImageProcessingService } from "../services/ImageProcessingService";
 import { redisClient } from "../redis/redis";
+import { processImage } from "../../helpers/processImage";
 
 async function startWorker() {
   await connectDB();
 
   const taskRepository = new TaskRepositoryMongo();
-  const imageProcessingService = new ImageProcessingService(taskRepository);
+  const imageProcessingService = new ImageProcessingService(
+    taskRepository,
+    processImage
+  );
   const processImageUseCase = new ProcessImageUseCase(
     taskRepository,
     imageProcessingService
