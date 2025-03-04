@@ -40,47 +40,17 @@ Antes de comenzar, asegúrate de tener instalado:
 
 4. Asegúrate de que MongoDB y Redis estén corriendo en tu sistema o en Docker.
 
----
+5. Construye y levanta los contenedores Docker:
 
-### 🔹 Configuración de MongoDB
+   ```bash
+   docker-compose up -d --build
+   ```
 
-Este proyecto requiere una conexión a **MongoDB**. Puedes usar **MongoDB Atlas** o una instancia local. Configura la variable `MONGO_URI` en tu archivo `.env`:
+6. Para detener los contenedores:
 
-#### **📌 Opción 1: MongoDB en Docker (recomendado)**
-
-Si usas `docker-compose`, la API se conectará automáticamente con este valor:
-
-```env
-MONGO_URI=mongodb://mongodb:27017/image-processing
-```
-
-#### **📌 Opción 2: MongoDB Atlas (Cloud)**
-
-Si prefieres usar **MongoDB Atlas**, reemplaza `MONGO_URI` en `.env` con tu cadena de conexión:
-
-```env
-MONGO_URI=mongodb+srv://usuario:contraseña@cluster0.mongodb.net/image-processing?retryWrites=true&w=majority
-```
-
-> 📌 **Nota:** Recuerda reemplazar `usuario`, `contraseña` y `cluster0.mongodb.net` con los datos de tu base de datos en Atlas.
-
----
-
-## 🐳 Dockerización
-
-Puedes ejecutar la aplicación dentro de contenedores Docker.
-
-### 🔹 Construcción de las imagenes
-
-```bash
-docker compose up -d --build
-```
-
-### 🔹 Detener a los contenedores
-
-```bash
-docker compose down
-```
+   ```bash
+   docker-compose down
+   ```
 
 ---
 
@@ -165,26 +135,6 @@ GET /api/tasks/:taskId
   "images": []
 }
 ```
-
----
-
-## 🚦 Monitoreo de la cola de tareas
-
-Puedes verificar las tareas en la cola de Redis:
-
-```bash
-redis-cli
-SELECT 1
-LRANGE bull:imageProcessing:waiting 0 -1
-```
-
-Si la tarea ha sido completada:
-
-```bash
-LRANGE bull:imageProcessing:completed 0 -1
-```
-
----
 
 ## 🧪 Pruebas
 
