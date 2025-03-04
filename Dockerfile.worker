@@ -16,6 +16,9 @@ COPY . .
 # **Build the project**
 RUN npm run build
 
+# Create a directory for the output
+RUN mkdir -p /output
+
 # Define environment variables
 ENV NODE_ENV=development
 

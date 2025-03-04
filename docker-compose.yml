@@ -16,6 +16,7 @@ services:
       - app-network
     volumes:
       - .:/app
+      - ./output:/output
 
   worker:
     build:
@@ -29,6 +30,8 @@ services:
     networks:
       - app-network
     restart: always
+    volumes:
+      - ./output:/output
 
   redis:
     image: redis
