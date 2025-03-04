@@ -47,7 +47,13 @@ Antes de comenzar, asegúrate de tener instalado:
    docker-compose up -d --build
    ```
 
-6. Para detener los contenedores:
+6. Check API health
+
+   ```bash
+   curl http://localhost:4000/api/health
+   ```
+
+7. Para detener los contenedores:
 
    ```bash
    docker-compose down
@@ -70,7 +76,7 @@ Para comprobar que la base de datos se ha poblado correctamente, accede al conte
 1. Accede al contenedor de MongoDB:
 
 ```bash
-docker exec < CONTAINER NAME > mongosh
+docker exec -it < CONTAINER NAME > mongosh
 ```
 
 2. Buscar la BBDD
