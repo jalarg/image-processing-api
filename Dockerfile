@@ -10,6 +10,9 @@ COPY package*.json ./
 # Install dependencies
 RUN npm install --omit=dev
 
+# Install nodemon and ts-node globally
+RUN npm install -g nodemon ts-node
+
 # Copy the rest of the application files
 COPY . .
 
