@@ -26,10 +26,11 @@ Antes de comenzar, asegúrate de tener instalado:
    cd image-processing-api
    ```
 
-2. Instala las dependencias del proyecto:
+2. Instala las dependencias del proyecto y corre el build:
 
    ```bash
    npm install
+   npm run build
    ```
 
 3. Copia el archivo de variables de entorno y configúralo:
