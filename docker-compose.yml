@@ -33,9 +33,6 @@ services:
     networks:
       - app-network
     restart: always
-    volumes:
-      - .:/app
-      - /app/node_modules
     command: npm run start:worker
     environment:
       - NODE_ENV=development

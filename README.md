@@ -22,7 +22,7 @@ Antes de comenzar, asegúrate de tener instalado:
 1. Clona este repositorio:
 
    ```bash
-   git clone https://github.com/jalarg/image-processing-api.git
+   gh repo clone jalarg/image-processing-api
    cd image-processing-api
    ```
 
@@ -70,24 +70,16 @@ MONGO_URI=mongodb+srv://usuario:contraseña@cluster0.mongodb.net/image-processin
 
 Puedes ejecutar la aplicación dentro de contenedores Docker.
 
-### 🔹 Construcción de la imagen
+### 🔹 Construcción de las imagenes
 
 ```bash
-docker build -t image-processing-api .
+docker compose up -d --build
 ```
 
-### 🔹 Ejecución del contenedor
+### 🔹 Detener a los contenedores
 
 ```bash
-docker run -d -p 4000:4000 --name image-processing-api --env-file .env image-processing-api
-```
-
-### 🔹 Redis con Docker
-
-Si no tienes Redis instalado localmente, levanta un contenedor con:
-
-```bash
-docker run -d --name redis_project -p 6380:6379 redis
+docker compose down
 ```
 
 ---
@@ -200,6 +192,12 @@ Ejecuta las pruebas unitarias con Vitest:
 
 ```bash
 npm run test
+```
+
+Ejecuta las pruebas de integracion:
+
+```bash
+npm run test:integration
 ```
 
 Para pruebas en modo observación:

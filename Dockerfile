@@ -20,7 +20,7 @@ RUN npm run build
 EXPOSE 4000
 
 # Define environment variables
-ENV NODE_ENV=production
+ENV NODE_ENV=development
 
 # **Run the API**
 CMD ["node", "-r", "tsconfig-paths/register", "dist/server.js"]
