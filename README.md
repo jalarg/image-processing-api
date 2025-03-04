@@ -55,6 +55,44 @@ Antes de comenzar, asegúrate de tener instalado:
 
 ---
 
+## 📁 Seed de la database
+
+Para correr el seed con datos ejemplo:
+
+```bash
+docker-compose run api ts-node src/infrastructure/database/seed-database.ts
+```
+
+Verificar la Base de Datos
+
+Para comprobar que la base de datos se ha poblado correctamente, accede al contenedor de MongoDB y ejecuta los siguientes comandos:
+
+1. Accede al contenedor de MongoDB:
+
+```bash
+docker exec < CONTAINER NAME > mongosh
+```
+
+2. Buscar la BBDD
+
+```bash
+show dbs
+```
+
+3. Seleccionar la BBDD
+
+```bash
+ use image-processing
+```
+
+4. Comando para Verificar la Colección (Ej. contar collection)
+
+```bash
+db.tasks.countDocuments()
+```
+
+---
+
 ## 📁 Endpoints de la API
 
 ### 🔹 Crear una tarea de procesamiento de imagen

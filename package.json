@@ -13,7 +13,8 @@
     "dev": "nodemon -r ts-node/register -r tsconfig-paths/register src/server.ts",
     "build": "tsc",
     "start": "node -r tsconfig-paths/register dist/server.js",
-    "start:worker": "node -r tsconfig-paths/register dist/infrastructure/workers/taskWorker.js"
+    "start:worker": "node -r tsconfig-paths/register dist/infrastructure/workers/taskWorker.js",
+    "seed": "ts-node src/infrastructure/database/seed-database.ts"
   },
   "keywords": [],
   "author": "",

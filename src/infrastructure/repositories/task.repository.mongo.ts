@@ -21,6 +21,35 @@ type MongoTask = {
 };
 
 export class TaskRepositoryMongo implements TaskRepository {
+  async seedDatabase(): Promise<void> {
+    const tasksCollection = mongoose.connection.db?.collection("tasks");
+    if (!tasksCollection) {
+      throw new Error("Tasks collection not found");
+    }
+    await tasksCollection.insertMany([
+      {
+        status: "completed",
+        price: 25.5,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        originalPath: "/input/image1.jpg",
+        images: [
+          { resolution: "1024", path: "/output/image1/1024/f322b730b287.jpg" },
+          { resolution: "800", path: "/output/image1/800/202fd8b3174.jpg" },
+        ],
+      },
+      {
+        status: "pending",
+        price: 30.0,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        originalPath: "/input/image2.jpg",
+        images: [],
+      },
+    ]);
+    console.log("✅ Database seeded successfully!");
+  }
+
   async save(task: Task): Promise<Task> {
     const newTask = new TaskModel(task);
     const savedTask = await newTask.save();
