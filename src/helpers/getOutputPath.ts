@@ -19,14 +19,16 @@ export function getOutputPath(
   // Clean the filename (remove special characters)
   const filename = path.basename(cleanUrl, ext).replace(/[^a-zA-Z0-9]/g, "_");
 
-  // Define the correct output directory
-  const outputDir = path.join(
-    __dirname,
-    "..",
-    "output",
-    filename,
-    resolution.toString()
-  );
+  // Check if `/output` exists to detect if running in Docker
+  const isDocker = fs.existsSync("/output");
+
+  // Set output directory based on environment
+  const baseOutputDir = isDocker
+    ? "/output" // Inside Docker
+    : path.join(__dirname, "..", "output"); // Local development
+
+  // Construct the full output path
+  const outputDir = path.join(baseOutputDir, filename, resolution.toString());
 
   // Ensure the directory exists
   fs.ensureDirSync(outputDir);

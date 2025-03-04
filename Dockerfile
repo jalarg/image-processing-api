@@ -16,6 +16,9 @@ RUN npm install -g nodemon ts-node
 # Copy the rest of the application files
 COPY . .
 
+# Create a directory for the output
+RUN mkdir -p /output
+
 # **Build the project**
 RUN npm run build
 
