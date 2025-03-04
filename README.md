@@ -12,10 +12,7 @@ Esta API permite la subida y procesamiento de imágenes de forma asíncrona util
 
 Antes de comenzar, asegúrate de tener instalado:
 
-- [Node.js 20+](https://nodejs.org/)
-- [Docker](https://www.docker.com/)
-- [MongoDB Atlas o Local](https://www.mongodb.com/atlas/database)
-- [Redis](https://redis.io/) _(Docker recomendado)_
+Docker
 
 ### 🔹 Instalación
 
