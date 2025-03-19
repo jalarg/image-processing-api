@@ -10,7 +10,7 @@ services:
     env_file:
       - .env
     depends_on:
-      - redis
+      - redis-stack
       - mongo
     networks:
       - app-network
@@ -25,7 +25,7 @@ services:
     env_file:
       - .env
     depends_on:
-      - redis
+      - redis-stack
       - mongo
     networks:
       - app-network
@@ -33,13 +33,14 @@ services:
     volumes:
       - ./output:/output
 
-  redis:
-    image: redis
-    restart: always
+  redis-stack:
+    image: redis/redis-stack:latest
     ports:
       - "6380:6379"
+      - "8001:8001"
     networks:
       - app-network
+    restart: always
 
   mongo:
     image: mongo
