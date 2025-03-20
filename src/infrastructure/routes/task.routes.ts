@@ -5,14 +5,18 @@ import { TaskRepository } from "../../domain/repositories/task.repository";
 import { TaskCacheService } from "../services/TaskCacheService";
 import { TaskQueueService } from "../services/TaskQueueService";
 
-export default function taskRoutes(taskRepository: TaskRepository) {
+export default function taskRoutes(
+  taskRepository: TaskRepository,
+  taskCacheService: TaskCacheService,
+  taskQueueService: TaskQueueService
+) {
   const router = Router();
 
-  const taskCacheService = new TaskCacheService();
+  // Usamos las dependencias inyectadas
   const getTaskUseCase = new GetTaskUseCase(taskRepository, taskCacheService);
   const createTaskUseCase = new CreateTaskUseCase(
     taskRepository,
-    new TaskQueueService()
+    taskQueueService
   );
   const taskController = new TaskController(getTaskUseCase, createTaskUseCase);
 

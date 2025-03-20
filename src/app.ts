@@ -8,8 +8,12 @@ import { TaskRepository } from "./domain/repositories/task.repository";
 import createRouter from "./infrastructure/routes/index.routes";
 import { errorMiddleware } from "./infrastructure/middlewares/errorHandler";
 import { serverAdapter } from "./infrastructure/queues/bullBoard";
+import { TaskQueueService } from "./infrastructure/services/TaskQueueService";
+import { TaskCacheService } from "./infrastructure/services/TaskCacheService";
 
 const taskRepository: TaskRepository = new TaskRepositoryMongo();
+const taskCacheService = new TaskCacheService();
+const taskQueueService = new TaskQueueService();
 
 dotenv.config();
 // Create an express application
@@ -40,7 +44,10 @@ const swagger = swaggerJSDoc(swaggerOptions);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swagger));
 
 // Add routes including health check
-app.use("/api", createRouter(taskRepository));
+app.use(
+  "/api",
+  createRouter(taskRepository, taskCacheService, taskQueueService)
+);
 
 // Add error handling middleware
 app.use(errorMiddleware);

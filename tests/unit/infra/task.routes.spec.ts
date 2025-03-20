@@ -6,6 +6,7 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import mongoose from "mongoose";
 import { errorMiddleware } from "../../../src/infrastructure/middlewares/errorHandler";
 
+// Mock ObjectId
 const mockObjectId = new mongoose.Types.ObjectId();
 // Mock TaskRepository
 const taskRepositoryMock = {
@@ -23,18 +24,45 @@ const taskRepositoryMock = {
     price: 25,
     images: [],
   }),
+
+  // Mock other methods that are part of the TaskRepository interface
+  findById: vi.fn().mockResolvedValue({
+    _id: mockObjectId,
+    originalPath: "https://example.com/image.jpg",
+    status: "pending",
+    price: 25,
+    images: [],
+  }),
+  updateTaskStatus: vi.fn().mockResolvedValue({
+    _id: mockObjectId,
+    status: "completed",
+  }),
+  findTasksByDateRange: vi.fn().mockResolvedValue([]),
+  completeTask: vi.fn().mockResolvedValue({
+    _id: mockObjectId,
+    status: "completed",
+  }),
 };
 
-// Mock ProcessImageUseCase
-const processImageUseCaseMock = {
-  taskRepository: taskRepositoryMock,
-  execute: vi.fn().mockResolvedValue(undefined),
+// Mock TaskCacheService
+const taskCacheServiceMock = {
+  getTaskFromCache: vi.fn().mockResolvedValue(null),
+  setTaskInCache: vi.fn().mockResolvedValue(undefined),
 };
 
-// Create Express App with Injected Mocks for TaskRepository and ProcessImageUseCase
+// Mock TaskQueueService
+const taskQueueServiceMock = {
+  addTaskToQueue: vi.fn().mockResolvedValue(undefined),
+  addToQueue: vi.fn().mockResolvedValue(undefined),
+};
+
+// Create Express App with Injected Mocks for TaskRepository, TaskCacheService, and TaskQueueService
 const app = express();
 app.use(express.json());
-app.use("/tasks", taskRoutes(taskRepositoryMock, processImageUseCaseMock));
+app.use(
+  "/tasks",
+  taskRoutes(taskRepositoryMock, taskCacheServiceMock, taskQueueServiceMock)
+);
 app.use("/health", healthRoutes);
 app.use(errorMiddleware);
 
