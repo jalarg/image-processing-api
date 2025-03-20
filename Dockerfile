@@ -11,7 +11,7 @@ COPY package*.json ./
 RUN npm install --omit=dev
 
 # Install nodemon and ts-node globally
-RUN npm install -g nodemon ts-node
+RUN npm install -g nodemon ts-node tsconfig-paths
 
 # Copy the rest of the application files
 COPY . .
