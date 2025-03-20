@@ -1,0 +1,23 @@
+config:
+  target: "http://localhost:4000"
+  phases:
+    - name: "Ramp-up"
+      duration: 30
+      arrivalRate: 50
+      rampTo: 500
+    - name: "Breakpoint Test"
+      duration: 20
+      arrivalRate: 1000
+    - name: "Cooldown"
+      duration: 10
+      arrivalRate: 100
+  processor: "./setup.js"
+
+before:
+  flow:
+    - function: "createTask"
+
+scenarios:
+  - flow:
+      - get:
+          url: "/api/tasks/{{ taskId }}"

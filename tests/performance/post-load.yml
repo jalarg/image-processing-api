@@ -1,0 +1,12 @@
+config:
+  target: "http://localhost:4000"
+  phases:
+    - duration: 300
+      arrivalRate: 50
+
+scenarios:
+  - flow:
+      - post:
+          url: "/api/tasks"
+          json:
+            originalPath: "https://example.com/image1.jpg"
