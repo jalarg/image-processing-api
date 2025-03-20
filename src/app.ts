@@ -7,6 +7,7 @@ import { TaskRepositoryMongo } from "./infrastructure/repositories/task.reposito
 import { TaskRepository } from "./domain/repositories/task.repository";
 import createRouter from "./infrastructure/routes/index.routes";
 import { errorMiddleware } from "./infrastructure/middlewares/errorHandler";
+import { serverAdapter } from "./infrastructure/queues/bullBoard";
 
 const taskRepository: TaskRepository = new TaskRepositoryMongo();
 
@@ -18,6 +19,9 @@ app.use(cors());
 
 // Add JSON parsing to the app
 app.use(express.json());
+
+// Add BullBoard
+app.use("/admin/queues", serverAdapter.getRouter());
 
 // setup swagger
 const swaggerOptions = {
