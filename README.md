@@ -12,16 +12,34 @@ Esta API permite la subida y procesamiento de imágenes de forma asíncrona util
 
 Antes de comenzar, asegúrate de tener instalado:
 
-Docker
+- [Node.js](https://nodejs.org/) (versión recomendada: 18+)
+- [npm](https://www.npmjs.com/) o [yarn](https://yarnpkg.com/)
+- [Docker](https://www.docker.com/) y [Docker Compose](https://docs.docker.com/compose/)
+- **Redis** y **MongoDB** (pueden ejecutarse con Docker)
 
 ### 🔹 Instalación
 
 1. Clona este repositorio:
 
-   ```bash
-   gh repo clone jalarg/image-processing-api
-   cd image-processing-api
-   ```
+   - Con **GitHub CLI**:
+
+     ```bash
+     gh repo clone jalarg/image-processing-api
+     cd image-processing-api
+     ```
+
+   - Con **Git (HTTPS)**:
+
+     ```bash
+     git clone https://github.com/jalarg/image-processing-api.git
+     cd image-processing-api
+     ```
+
+   - Con **Git (SSH)**:
+     ```bash
+     git clone git@github.com:jalarg/image-processing-api.git
+     cd image-processing-api
+     ```
 
 2. Instala las dependencias del proyecto y corre el build:
 
@@ -50,11 +68,11 @@ Docker
    curl http://localhost:4000/api/health
    ```
 
-7. Para detener los contenedores:
+Para detener los contenedores:
 
-   ```bash
-   docker-compose down
-   ```
+```bash
+docker-compose down
+```
 
 ---
 
@@ -192,8 +210,40 @@ Ejecuta las pruebas de integracion:
 npm run test:integration
 ```
 
+Para pruebas de stress:
+
+```bash
+test:post-load
+npm run test:stress-moderate
+npm run test:stress-breakpoint
+```
+
 Para pruebas en modo observación:
 
 ```bash
 npm run test:watch
 ```
+
+## 📜 Documentación de la API
+
+Para explorar y probar los endpoints de la API con Swagger, accede a:
+
+[📖 Ver documentación Swagger](http://localhost:4000/api/docs)
+
+Aquí podrás ver la documentación de los endpoints y probar las solicitudes directamente desde la interfaz.
+
+---
+
+## 📊 Monitorización de Colas con BullBoard
+
+Para visualizar el estado de las tareas en cola, accede a BullBoard en:
+
+[📊 Ver BullBoard](http://localhost:4000/admin/queues)
+
+Desde esta interfaz podrás ver las tareas en espera, en proceso y completadas, así como depurar errores en el procesamiento.
+
+## 🗄️ Monitoreo de Redis
+
+Para inspeccionar el estado de Redis y visualizar las claves almacenadas, puedes usar **RedisInsight** accediendo a:
+
+[📡 Ver RedisInsight](http://localhost:8001)
