@@ -228,7 +228,7 @@ npm run test:watch
 
 Para explorar y probar los endpoints de la API con Swagger, accede a:
 
-[📖 Ver documentación Swagger](http://localhost:4000/api/docs)
+[📖 Ver documentación Swagger](http://localhost:4000/api-docs)
 
 Aquí podrás ver la documentación de los endpoints y probar las solicitudes directamente desde la interfaz.
 
